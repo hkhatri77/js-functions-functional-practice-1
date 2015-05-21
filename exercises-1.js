@@ -61,15 +61,12 @@ console.assert(squares[3] === 16)
 // that takes an array and a function
 // ----------------------------
 
-function filter(array, callback){
-    var newArray = [];
-    for (var i=0; ilen=array.length; i<ilen, i++){
-        if (array[i] % 2 == 0)
-            reduce(array, function(v, i, array){
-                newArray.push(callback(v,i,array))
-            })
-        return newArray;
-    }
+function filter(array, callback) {
+    var newArray = []
+    reduce(newArray, function(v, i, array) {
+        newArray.push(callback(v, i, array))
+    })
+    return newArray;
 }
 
 //var evens = filter([1, 2, 3, 4], function(v){ return v%2 === 0 })
@@ -123,3 +120,6 @@ names.sort(function(a, b){
 console.assert(names[0].name === "Brian")
 console.assert(names[1].name === "Jesse")
 console.assert(names[2].name === "Matt")
+
+
+
