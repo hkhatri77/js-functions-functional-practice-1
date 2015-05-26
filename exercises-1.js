@@ -21,10 +21,10 @@ console.assert(total === 24)
 // using forEach() from above, write your own reduce()
 // that takes an array and a function
 // ----------------------------
-function reduce(arr, cb, defaultValue) {
-    var a = defaultValue ? defaultValue : arr.shift()
-    forEach(arr, function(v, i, arr) {
-        a = cb(a, v, i, arr)
+function reduce(array, callback, defaultValue) {
+    var a = defaultValue ? defaultValue : array.shift()
+    forEach(array, function(v, i, array) {
+        a = callback(a, v, i, array)
     })
     return a
 }
@@ -61,27 +61,31 @@ console.assert(squares[3] === 16)
 // that takes an array and a function
 // ----------------------------
 
-function filter(array, callback) {
-    var newArray = []
-    reduce(newArray, function(v, i, array) {
-        newArray.push(callback(v, i, array))
-    })
-    return newArray;
+function filter(array, cb) {
+    var result = []
+    reduce(array, function(result, v, i, array) {
+        if (cb(v, i, array)) {
+            result.push(v)}
+        return result;
+    }, result)
+    return result;
 }
 
-//var evens = filter([1, 2, 3, 4], function(v){ return v%2 === 0 })
-//console.assert(evens[0] === 2)
-//console.assert(evens[1] === 4)
+var evens = filter([1, 2, 3, 4], function(v) {
+    return v % 2 === 0
+})
+console.assert(evens[0] === 2)
+console.assert(evens[1] === 4)
 
 // ----------------------------
 // using reduce() from above, write your own sum()
 // that adds up all arguments to sum (note: variadic behavior)
 // ----------------------------
 
-function sum(arr){
- var args = Array.prototype.slice.call(arguments)
-    return args.reduce(function(a, v){
-        return a+v
+function sum(arr) {
+    var args = Array.prototype.slice.call(arguments)
+    return args.reduce(function(a, v) {
+        return a + v
     }, 0)
 }
 
@@ -104,14 +108,14 @@ var names = [
     {name:"Jesse", alma_mater:"Univ of Texas - Austin"}
 ]
 
-names.sort(function(a, b){
-  if (a.name > b.name) {
-    return 1;
-  }
-  if (a.name < b.name) {
-    return -1;
-  }
-  return 0;
+names.sort(function(a, b) {
+    if (a.name > b.name) {
+        return 1;
+    }
+    if (a.name < b.name) {
+        return -1;
+    }
+    return 0;
 });
 
 
@@ -121,5 +125,40 @@ console.assert(names[0].name === "Brian")
 console.assert(names[1].name === "Jesse")
 console.assert(names[2].name === "Matt")
 
+// ----------------------------
+// Using Array.map(), Array.filter(), and Array.sort() on the
+// array below:
+// - filter for customers whose first-names start with 'J',
+// - map to their fullnames,
+// - and then sort the items alphabetically by fullname
+// ----------------------------
 
+var customers = [
+    { first: 'Joe', last: 'Blogs'},
+    { first: 'John', last: 'Smith'},
+    { first: 'Dave', last: 'Jones'},
+    { first: 'Jack', last: 'White'}
+]
 
+var results = customers
+    .filter(function(obj) {
+        if (obj.first.charAt(0) == ('J')) {
+            return true
+        }
+    })
+    .map(function(obj) {
+        var name = {}
+        name.fullname = obj.first + ' ' + obj.last
+        return name
+    })
+    .sort(function(a, b) {
+        if (a.fullname > b.fullname) 
+            return 1
+        if (a.fullname < b.fullname) 
+        return 
+    })
+
+// tests
+// ---
+console.assert(results[0].fullname === "Jack White")
+console.assert(results[2].fullname === "John Smith")
